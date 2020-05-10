@@ -33,11 +33,10 @@ const getData = async ( url = '')=>{
       headers: {
           'Content-Type': 'application/json',
       },
-       body: JSON.stringify(data), 
+       body: JSON.stringify(data) 
     });
       try {
         const newData = await response.json();
-        console.log(newData);
         return newData;
       }catch(error) {
       console.log("error", error);
@@ -53,7 +52,23 @@ const getData = async ( url = '')=>{
     getData(getWeatherUrl())
     .then(function(data){
         postData('../add', {temperature: data.main.temp, date: newDate, user_response: feelingToday})
+    })
+    .then(function(){
+        updateUI();
     });
+  }
+
+  const updateUI = async () => {
+    const request = await fetch('/all');
+    try{
+      const allData = await request.json();
+      const lastIndex = allData.length -1; 
+      document.getElementById('date').innerHTML = allData[lastIndex].date;
+      document.getElementById('temp').innerHTML = allData[lastIndex].temperature;
+      document.getElementById('content').innerHTML = allData[lastIndex].user_response;
+     }catch(error){
+      console.log("error", error);
+    }
   }
 
 //events

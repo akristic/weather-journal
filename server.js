@@ -26,7 +26,7 @@ function listening(){
     console.log(`running on localhost: ${port}`);
 }
 
-app.get('/', function(req, res){
+app.get('/all', function(req, res){
     res.send(projectData);
 })
 
