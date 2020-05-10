@@ -1,24 +1,23 @@
 /* Global Variables */
 const generate = document.getElementById('generate')
 const baseUrl = "https://api.openweathermap.org/data/2.5/weather?"
-const apiKey = "&appid=28736653ad6c42f248388523a9ff3d0e"
-let zipPart = "zip=94203" // default zip code
+const apiKey = "28736653ad6c42f248388523a9ff3d0e"
+let zip = "94203" // default zip code
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = (d.getMonth()+1) + '.'+ d.getDate()+'.'+ d.getFullYear();
+let newDate = (d.getMonth() + 1) + '.'+ d.getDate()+'.'+ d.getFullYear();
 
 //Helper functions
 function getWeatherUrl(){
-    return baseUrl + zipPart + apiKey;
+    return baseUrl + "zip=" + zip + "&appid=" + apiKey;
 }
 
 // get and post tasks
-const getData = async ( url = '')=>{
+const getWeatherData = async ( url = '')=>{
       const response = await fetch(url);
       try {
         const newData = await response.json();
-        console.log(newData);
         return newData;
       }catch(error) {
       console.log("error", error);
@@ -26,7 +25,6 @@ const getData = async ( url = '')=>{
   }
  
   const postData = async ( url = '', data = {})=>{
-    console.log(data);
       const response = await fetch(url, {
       method: 'POST', 
       credentials: 'same-origin',
@@ -47,9 +45,9 @@ const getData = async ( url = '')=>{
     const feelingToday =  document.getElementById('feelings').value;
     const zipCode = document.getElementById('zip').value;
     if(zipCode !== ""){
-        zipPart = `zip=${zipCode}`;
+        zip = zipCode;
     }    
-    getData(getWeatherUrl())
+    getWeatherData(getWeatherUrl())
     .then(function(data){
         postData('../add', {temperature: data.main.temp, date: newDate, user_response: feelingToday})
     })
